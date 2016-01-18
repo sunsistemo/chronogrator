@@ -1,0 +1,10 @@
+Chronogrator
+============
+
+[![Computational Science](http://preview.computationalscience.nl/wp-content/uploads/2014/09/computationalsciencelogo-fc-trans-300x100.png)](http://uva.computationalscience.nl/)
+
+# Credits
+
+# License
+
+[GPL-3.0+](https://github.com/sunsistemo/chronogrator/blob/master/LICENSE.txt)
