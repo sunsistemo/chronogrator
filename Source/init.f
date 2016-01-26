@@ -6,9 +6,9 @@ c
 c    Delt    (output) : time step MD simulation
 c    Tmax    (output) : total simulation time
 c    Tequil  (output) : total equilibration time
-c    Temprqs (output) : requisted temperature
+c    Temprqs (output) : requested temperature
 c    Scale  (output)  : if .true. use temperature scaling
-c                     : if .falsee. no temperature scaling
+c                     : if .false. no temperature scaling
 c
 c
       IMPLICIT NONE

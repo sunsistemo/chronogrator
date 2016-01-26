@@ -1,7 +1,7 @@
 **==setvel.spg  processed by SPAG 4.52O  at 15:46 on 28 Mar 1996
       SUBROUTINE SETVEL(Temp, Iseed, Vx0t, Vy0t, Vz0t)
 c
-c   Give particles an radom initial velocity
+c   Give particles a random initial velocity
 c
 c   Temp (input)  : requested temperature
 c   Iseed (input) : seed random number generator

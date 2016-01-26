@@ -57,7 +57,7 @@ c     ---total energy of the system
             IF (scale) THEN
                IF (MOD(step,20).EQ.0) CALL VELOCS(temprsq)
             END IF
-c           ---if system equilbrated sample averages:
+c           ---if system equilibrated sample averages:
          ELSE IF (MOD(step,NSAMP).EQ.0) THEN
             IF (SAMP1) CALL SAMPLE(1, step, en, vir, enk, delt)
             IF (SAMP2) CALL SAMPLE2(1, delt)

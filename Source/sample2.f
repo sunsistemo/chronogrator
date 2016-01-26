@@ -34,7 +34,7 @@ c        ---determine current maximum number of blocks: iblm
          DO WHILE (ii.NE.0)
             iblm = iblm + 1
             ii = ii/NBLock
-c           ---test maximu time not longer than tdifmax:
+c           ---test maximum time not longer than tdifmax:
             time = dtime*(NBLock**(iblm))
             IF (time.GT.TDIFMAX) ii = 0
          END DO

@@ -3,7 +3,7 @@
       SUBROUTINE VELOCS(Temp)
 c
 c
-c  Simple velocity scaling (only used during equilbration!!!!)
+c  Simple velocity scaling (only used during equilibration!!!!)
 c
 c   Temp (input) : target velocity
 c
