@@ -15,10 +15,13 @@ c
       INCLUDE 'conf.inc'
       INCLUDE 'system.inc'
       INCLUDE 'potential.inc'
- 
-      DOUBLE PRECISION xi, yi, zi, En, dx, dy, dz, r2, Vir, virij, enij, 
-     &                 fr, Fx, Fy, Fz, r2i, r6i
-      INTEGER i, j
+      INCLUDE 'verlet.inc'
+
+      DOUBLE PRECISION xi, yi, zi, En, dx, dy, dz, r2, Vir, virij, enij,
+     &     fr, Fx, Fy, Fz, r2i, r6i, rc
+c     --- 108 = NPART
+      INTEGER i, j, VNPART, nlist(108)
+      INTEGER list(108, 108)
       DIMENSION Fx(*), Fy(*), Fz(*)
 c
       En = 0.D0
@@ -28,11 +31,20 @@ c
          Fy(i) = 0
          Fz(i) = 0
       END DO
+      DO i = 1, NPART
+c     --- Check whether to make new Verlet list
+         IF (abs(X(i) - XV(i)).GT.(rv - rc)) THEN
+            CALL VLIST(nlist, list)
+         END IF
+      END DO
       DO i = 1, NPART - 1
          xi = X(i)
          yi = Y(i)
          zi = Z(i)
-         DO j = i + 1, NPART
+c     --- For particle i calculate interaction with other particles
+c     in its Verlet-list
+c        DO j = 1, VNPART
+         DO j = 1, NLIST(i)
             dx = xi - X(j)
             dy = yi - Y(j)
             dz = zi - Z(j)

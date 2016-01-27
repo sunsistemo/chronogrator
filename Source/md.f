@@ -22,7 +22,7 @@ c
       IMPLICIT NONE
       INTEGER nstep, nstep10, step
       LOGICAL scale
-      DOUBLE PRECISION en, ent, vir, virt, enk, time, enpot, delt, tmax, 
+      DOUBLE PRECISION en, ent, vir, virt, enk, time, enpot, delt, tmax,
      &                 enkt, tequil, temprsq
 c --common blocks declaration:
       INCLUDE 'parameter.inc'
@@ -32,8 +32,8 @@ c --common blocks declaration:
       INCLUDE 'system.inc'
       INCLUDE 'samp.inc'
       DOUBLE PRECISION fx(NPMax), fy(NPMax), fz(NPMax)
- 
- 
+
+
       WRITE (6, *) '**************** MC_NPT ***************'
 c     ---initialize sysem
       CALL INIT(delt, tmax, tequil, temprsq, scale)
@@ -48,6 +48,8 @@ c     ---total energy of the system
       nstep10 = INT(nstep/10)
       IF (nstep.EQ.0) nstep10 = 0
       DO WHILE (time.LT.tmax)
+c     ---propagate all particles with one time-step and store new
+c     positions in a Verlet-list
          CALL FORCE(fx, fy, fz, enpot, vir)
          CALL SOLVE(fx, fy, fz, enk, delt)
          time = time + delt
@@ -56,6 +58,7 @@ c     ---total energy of the system
          IF (time.LT.tequil) THEN
             IF (scale) THEN
                IF (MOD(step,20).EQ.0) CALL VELOCS(temprsq)
+               IF (MOD(step,20).EQ.0) CALL VELOCS(temprsq)
             END IF
 c           ---if system equilibrated sample averages:
          ELSE IF (MOD(step,NSAMP).EQ.0) THEN
@@ -63,7 +66,7 @@ c           ---if system equilibrated sample averages:
             IF (SAMP2) CALL SAMPLE2(1, delt)
          END IF
          IF (MOD(step,nstep10).EQ.0) THEN
-            WRITE (6, *) '======>> Done ', SNGL(time), ' out of ', 
+            WRITE (6, *) '======>> Done ', SNGL(time), ' out of ',
      &                   SNGL(tmax), en
 c           ---write intermediate configuration to file
             CALL STORE(8)
@@ -75,12 +78,12 @@ c           ---write intermediate configuration to file
       WRITE (6, 99002) ent, virt
       CALL STORE(21)
       STOP
- 
-99001 FORMAT (' Total pot. energy in. conf.       : ', f12.5, /, 
-     &        ' Total kinetic energy in. conf.    : ', f12.5, /, 
-     &        ' Total energy in. conf.            : ', f12.5, /, 
+
+99001 FORMAT (' Total pot. energy in. conf.       : ', f12.5, /,
+     &        ' Total kinetic energy in. conf.    : ', f12.5, /,
+     &        ' Total energy in. conf.            : ', f12.5, /,
      &        ' Total virial initial configuration: ', f12.5)
-99002 FORMAT (' Total energy end of simulation    : ', f12.5, /, 
+99002 FORMAT (' Total energy end of simulation    : ', f12.5, /,
      &        ' Total virial end of simulation    : ', f12.5)
- 
+
       END

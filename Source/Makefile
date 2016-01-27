@@ -1,4 +1,4 @@
-COMPFLAGS     =  -O # -check_bounds -trapeuv # -g 
+COMPFLAGS     =  -O # -check_bounds -trapeuv # -g
 
 CFLAGS	      = $(COMPFLAGS)
 PFLAGS	      = $(COMPFLAGS)
@@ -15,16 +15,16 @@ DEST	      = .
 EXTHDRS	      =
 
 HDRS	      =
- 
+
 INSTALL	      = install
 
-LD	      = f77 
+LD	      = f77
 
 LDFLAGS	      = $(COMPFLAGS) # -l nag
 
-LIBS	      = 
+LIBS	      =
 
-LINTLIBS      = 
+LINTLIBS      =
 
 LINTFLAGS     = -u $(CFLAGS)
 
@@ -43,7 +43,8 @@ OBJS	      = eneri.o \
 		solve.o \
 		store.o \
 		toterg.o \
-		velocs.o
+		velocs.o \
+		vlist.o
 
 PRINT	      = pr
 
@@ -51,7 +52,7 @@ PRINTFLAGS    =
 
 LP	      = lp
 
-LPFLAGS       = 
+LPFLAGS       =
 
 PROGRAM       = MD
 
@@ -70,7 +71,8 @@ SRCS	      = eneri.f \
 		solve.f \
 		store.f \
 		toterg.f \
-		velocs.f
+		velocs.f \
+		vlist.f
 
 all:		$(PROGRAM)
 
