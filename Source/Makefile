@@ -81,7 +81,7 @@ $(PROGRAM):     $(OBJS) $(LIBS) $(MAKEFILE)
 		@$(LD) $(LDFLAGS) $(OBJS) $(LIBS) -o $(PROGRAM)
 		@echo "done"
 
-clean:;		@rm -f $(OBJS) core
+clean:;		@rm -f $(OBJS) MD core
 
 clobber:;	@rm -f $(OBJS) $(PROGRAM) core tags
 
@@ -89,7 +89,7 @@ depend:;	@mkmf -f $(MAKEFILE) ROOT=$(ROOT)
 
 echo:;		@echo $(HDRS) $(SRCS)
 
--1:;		@ctags -wx $(HDRS) $(SRCS)
+-1:;		@ctags -wx $(HDRS) $(SRCS)o
 
 install:	$(PROGRAM)
 		@echo Installing $(PROGRAM) in $(DEST)

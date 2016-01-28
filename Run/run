@@ -1,11 +1,17 @@
 #! /bin/csh -f
+# Added the make command
+rm out
+cd ../Source
+make
+cd ../Run
 
+#original runscript
 foreach temp (0.728)
-  echo " --- temp ${temp} "  	
+  echo " --- temp ${temp} "
   echo " --- temp ${temp} "  	>> out
   cat > fort.15  <<endofdata
-  ibeg  , delt  tmax  tequil nsamp 
-   0     0.001  .5   0.00  1 
+  ibeg  , delt  tmax  tequil nsamp
+   0     0.001  .5   0.00  1
 npart temp rho      rcp  iseed
 108   ${temp} 0.8442   2.5  123456
  scale  temp
@@ -23,15 +29,9 @@ endofdata
  #perform block analysis
   cp lj.prth fort.31
   mv  lj.prt fort.32
-  ../Block/block    >>  out 
- rm fort.*
+  ../Block/block    >>  out
+  rm fort.*
+  # added opening outfile
+  less out
 end
 exit
-
-
-
-
-
-
-
-

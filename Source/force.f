@@ -16,14 +16,16 @@ c
       INCLUDE 'system.inc'
       INCLUDE 'potential.inc'
       INCLUDE 'verlet.inc'
+      INCLUDE 'samp.inc'
 
       DOUBLE PRECISION xi, yi, zi, En, dx, dy, dz, r2, Vir, virij, enij,
      &     fr, Fx, Fy, Fz, r2i, r6i, rc
 c     --- 108 = NPART
-      INTEGER i, j, VNPART, nlist(108)
+      INTEGER i, j, nlist(108)
       INTEGER list(108, 108)
       DIMENSION Fx(*), Fy(*), Fz(*)
 c
+      WRITE (6,*) rv, RC2
       En = 0.D0
       Vir = 0.D0
       DO i = 1, NPART
@@ -34,6 +36,7 @@ c
       DO i = 1, NPART
 c     --- Check whether to make new Verlet list
          IF (abs(X(i) - XV(i)).GT.(rv - rc)) THEN
+c            WRITE (6,*) i, abs(X(i) - XV(i)), rv - rc
             CALL VLIST(nlist, list)
          END IF
       END DO
