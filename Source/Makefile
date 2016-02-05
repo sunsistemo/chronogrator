@@ -1,4 +1,4 @@
-COMPFLAGS     =  -O # -check_bounds -trapeuv # -g
+COMPFLAGS     =  -O -g -fcheck=all # -check_bounds -trapeuv
 
 CFLAGS	      = $(COMPFLAGS)
 PFLAGS	      = $(COMPFLAGS)
@@ -81,7 +81,7 @@ $(PROGRAM):     $(OBJS) $(LIBS) $(MAKEFILE)
 		@$(LD) $(LDFLAGS) $(OBJS) $(LIBS) -o $(PROGRAM)
 		@echo "done"
 
-clean:;		@rm -f $(OBJS) MD core
+clean:;		@rm -f $(OBJS) core
 
 clobber:;	@rm -f $(OBJS) $(PROGRAM) core tags
 
@@ -89,7 +89,7 @@ depend:;	@mkmf -f $(MAKEFILE) ROOT=$(ROOT)
 
 echo:;		@echo $(HDRS) $(SRCS)
 
--1:;		@ctags -wx $(HDRS) $(SRCS)o
+-1:;		@ctags -wx $(HDRS) $(SRCS)
 
 install:	$(PROGRAM)
 		@echo Installing $(PROGRAM) in $(DEST)
