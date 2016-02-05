@@ -7,9 +7,9 @@ make
 cd ../Run
 
 #original runscript
-for DELTAT in 0.728; do
+for temp in 0.728; do
   echo " --- temp ${temp} "
-  echo " --- temp ${temp} "  	>> out
+  echo " --- temp ${temp} " >> out
   cat > fort.15  <<endofdata
   ibeg  , delt  tmax  tequil nsamp
    0     0.001  .5   0.00  1
