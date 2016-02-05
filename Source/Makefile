@@ -18,6 +18,7 @@ HDRS	      =
 
 INSTALL	      = install
 
+FC = gfortran --std=legacy
 LD	      = gfortran --std=legacy
 
 LDFLAGS	      = $(COMPFLAGS) # -l nag
