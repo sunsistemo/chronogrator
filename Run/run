@@ -26,7 +26,7 @@ endofdata
   if [[ $1 = "gdb" ]]; then
       gdb ../Source/MD
   else
-      time  ../Source/MD  >> out
+      time ../Source/MD
   fi
  cp fort.21         lj.res
  mv fort.66         lj.prt
@@ -34,8 +34,6 @@ endofdata
  #perform block analysis
   cp lj.prth fort.31
   mv  lj.prt fort.32
-  ../Block/block    >>  out
+  ../Block/block
   rm fort.*
-  # added opening outfile
-  less out
 done
