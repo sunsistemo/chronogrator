@@ -79,7 +79,7 @@ c     ---calculate cut-off radius potential
       ECUT = 4*(1/RC2**6-1/RC2**3)
 c     ---calculate Verlet list parameters
       rv = 1.05 * rc
-      rdv = rv - rc
+      rdv = (rv - rc) / 2.
 c     ---write input data
       WRITE (6, 99001) NPART, rho, BOX
       WRITE (6, 99003) temp, sumvx, sumvy, sumvz
