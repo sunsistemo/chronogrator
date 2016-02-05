@@ -20,7 +20,7 @@ c
 
       DOUBLE PRECISION xi, yi, zi, En, dx, dy, dz, r2, Vir, virij, enij,
      &     fr, Fx, Fy, Fz, r2i, r6i, rc
-      INTEGER i, j
+      INTEGER i, j, jj
       INTEGER nlist(npmax), list(npmax, npmax)
       DIMENSION Fx(*), Fy(*), Fz(*)
 
@@ -33,19 +33,18 @@ c
       END DO
       DO i = 1, NPART
 c     --- Check whether to make new Verlet list
-         IF (abs(X(i) - XV(i)).GT.(rv - rc)) THEN
-c            WRITE (6,*) i, abs(X(i) - XV(i)), rv - rc
+         IF (abs(X(i) - XV(i)).GT.(rdv)) THEN
             CALL VLIST(nlist, list)
          END IF
       END DO
-      DO i = 1, NPART - 1
+      DO i = 1, NPART
          xi = X(i)
          yi = Y(i)
          zi = Z(i)
 c     --- For particle i calculate interaction with other particles
 c     --- in its Verlet-list
-c        DO j = 1, VNPART
-         DO j = 1, NLIST(i)
+         DO jj = 1, NLIST(i)
+            j = list(i, jj)
             dx = xi - X(j)
             dy = yi - Y(j)
             dz = zi - Z(j)

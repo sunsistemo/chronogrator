@@ -18,6 +18,7 @@ c
       INCLUDE 'conf.inc'
       INCLUDE 'veloc.inc'
       INCLUDE 'samp.inc'
+      INCLUDE 'verlet.inc'
       INTEGER ibeg, i, iseed
       LOGICAL Scale
       DOUBLE PRECISION rho, Delt, Tmax, rc, sumvx, sumvy, sumvz, sumv2, 
@@ -76,6 +77,9 @@ c     ---calculate cut-off radius potential
       rc = MIN(rc, HBOX)
       RC2 = rc*rc
       ECUT = 4*(1/RC2**6-1/RC2**3)
+c     ---calculate Verlet list parameters
+      rv = 1.05 * rc
+      rdv = rv - rc
 c     ---write input data
       WRITE (6, 99001) NPART, rho, BOX
       WRITE (6, 99003) temp, sumvx, sumvy, sumvz

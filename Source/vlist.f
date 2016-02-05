@@ -32,5 +32,4 @@
          END DO
       END DO
       RETURN
-      WRITE (6,*) 'Hello'
       END
