@@ -31,12 +31,16 @@ c --common blocks declaration:
       INCLUDE 'potential.inc'
       INCLUDE 'system.inc'
       INCLUDE 'samp.inc'
+      INCLUDE 'verlet.inc'
+      INTEGER nlist(npmax), list(npmax, npmax)
       DOUBLE PRECISION fx(NPMax), fy(NPMax), fz(NPMax)
 
 
       WRITE (6, *) '**************** MC_NPT ***************'
-c     ---initialize sysem
+c     ---initialize system
       CALL INIT(delt, tmax, tequil, temprsq, scale)
+c     ---initialize verlet list
+      CALL VLIST(nlist, list)
 c     ---total energy of the system
       CALL TOTERG(en, vir, enk)
       WRITE (6, 99001) en - enk, enk, en + enk, vir
@@ -50,7 +54,7 @@ c     ---total energy of the system
       DO WHILE (time.LT.tmax)
 c     ---propagate all particles with one time-step and store new
 c     positions in a Verlet-list
-         CALL FORCE(fx, fy, fz, enpot, vir)
+         CALL FORCE(fx, fy, fz, enpot, vir, nlist, list)
          CALL SOLVE(fx, fy, fz, enk, delt)
          time = time + delt
          en = enpot + enk

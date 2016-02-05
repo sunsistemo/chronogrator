@@ -36,7 +36,6 @@ c     ---read simulation data
      &             IOUT4
       READ (15, *)
       READ (15, *) SAMP1, SAMP2, TDIFMAX
- 
 c     ---initialise and test random number generator
       CALL RANTEST(iseed)
  

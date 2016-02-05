@@ -1,5 +1,5 @@
 **==force.spg  processed by SPAG 4.52O  at 15:46 on 28 Mar 1996
-      SUBROUTINE FORCE(Fx, Fy, Fz, En, Vir)
+      SUBROUTINE FORCE(Fx, Fy, Fz, En, Vir, nlist, list)
 c
 c  Calculate the force acting on the particles
 c
@@ -20,12 +20,10 @@ c
 
       DOUBLE PRECISION xi, yi, zi, En, dx, dy, dz, r2, Vir, virij, enij,
      &     fr, Fx, Fy, Fz, r2i, r6i, rc
-c     --- 108 = NPART
-      INTEGER i, j, nlist(108)
-      INTEGER list(108, 108)
+      INTEGER i, j
+      INTEGER nlist(npmax), list(npmax, npmax)
       DIMENSION Fx(*), Fy(*), Fz(*)
-c
-      WRITE (6,*) rv, RC2
+
       En = 0.D0
       Vir = 0.D0
       DO i = 1, NPART
@@ -45,7 +43,7 @@ c            WRITE (6,*) i, abs(X(i) - XV(i)), rv - rc
          yi = Y(i)
          zi = Z(i)
 c     --- For particle i calculate interaction with other particles
-c     in its Verlet-list
+c     --- in its Verlet-list
 c        DO j = 1, VNPART
          DO j = 1, NLIST(i)
             dx = xi - X(j)

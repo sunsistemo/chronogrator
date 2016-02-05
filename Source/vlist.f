@@ -7,8 +7,8 @@
       INCLUDE 'potential.inc'
       INCLUDE 'verlet.inc'
 
-      INTEGER i, j, nlist(NPART)
-      INTEGER list(NPART, NPART)
+      INTEGER nlist(npmax), list(npmax, npmax)
+      INTEGER i, j
       DOUBLE PRECISION xr
 
       DO i = 1, NPART
