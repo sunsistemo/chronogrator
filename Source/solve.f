@@ -21,7 +21,7 @@ c
       v2 = 0.D0
 c     ===solve equations of motion
       DO i = 1, NPART
-c        ===leap frog alogithm
+c        ===leap frog algorithm
          vxt = VX(i)
          vyt = VY(i)
          vzt = VZ(i)

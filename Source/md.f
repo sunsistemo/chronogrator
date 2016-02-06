@@ -24,6 +24,7 @@ c
       LOGICAL scale
       DOUBLE PRECISION en, ent, vir, virt, enk, time, enpot, delt, tmax,
      &                 enkt, tequil, temprsq
+      DOUBLE PRECISION enpot2, vir2
 c --common blocks declaration:
       INCLUDE 'parameter.inc'
       INCLUDE 'conf.inc'
@@ -33,14 +34,17 @@ c --common blocks declaration:
       INCLUDE 'samp.inc'
       INCLUDE 'verlet.inc'
       INTEGER nlist(npmax), list(npmax, npmax)
+      INTEGER nlist2(npmax), list2(npmax, npmax)
       DOUBLE PRECISION fx(NPMax), fy(NPMax), fz(NPMax)
+      DOUBLE PRECISION fx2(NPMax), fy2(NPMax), fz2(NPMax)
 
 
       WRITE (6, *) '**************** MC_NPT ***************'
 c     ---initialize system
       CALL INIT(delt, tmax, tequil, temprsq, scale)
-c     ---initialize verlet list
-      CALL VLIST(nlist, list)
+c     ---initialize Verlet lists
+      CALL VLIST(nlist, list, rv)
+      CALL VLIST(nlist2, list2, rv2)
 c     ---total energy of the system
       CALL TOTERG(en, vir, enk)
       WRITE (6, 99001) en - enk, enk, en + enk, vir
@@ -54,8 +58,11 @@ c     ---total energy of the system
       DO WHILE (time.LT.tmax)
 c     ---propagate all particles with one time-step and store new
 c     positions in a Verlet-list
-         CALL FORCE(fx, fy, fz, enpot, vir, nlist, list)
-         CALL SOLVE(fx, fy, fz, enk, delt)
+         CALL FORCE(fx, fy, fz, enpot, vir, nlist, list, 1)
+         CALL FORCE(fx2, fy2, fz2, enpot2, vir2, nlist2, list2, 2)
+c         CALL SOLVE(fx, fy, fz, enk, delt)
+         CALL MULTI(fx, fy, fz, fx2, fy2, fz2, nlist, list,
+         &          nlist2, list2, enk, delt, 10)
          time = time + delt
          en = enpot + enk
          step = step + 1

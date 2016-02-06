@@ -22,7 +22,7 @@ c
       INTEGER ibeg, i, iseed
       LOGICAL Scale
       DOUBLE PRECISION rho, Delt, Tmax, rc, sumvx, sumvy, sumvz, sumv2, 
-     &                 temp, Tequil, Temprqs
+     &                 temp, Tequil, Temprqs, rm
  
  
 c     ---read simulation data
@@ -80,6 +80,9 @@ c     ---calculate cut-off radius potential
 c     ---calculate Verlet list parameters
       rv = 1.05 * rc
       rdv = (rv - rc) / 2.
+      rm = 2 ** (1/6.)
+      rv2 = 1.05 * rm
+      rdv2 = (rv2 - rm) / 2.
 c     ---write input data
       WRITE (6, 99001) NPART, rho, BOX
       WRITE (6, 99003) temp, sumvx, sumvy, sumvz

@@ -36,6 +36,7 @@ OBJS	      = eneri.o \
 		init.o \
 		lattice.o \
 		md.o \
+		multi.o \
 		ranf.o \
 		rantest.o \
 		sample.o \
@@ -64,6 +65,7 @@ SRCS	      = eneri.f \
 		init.f \
 		lattice.f \
 		md.f \
+		multi.f \
 		ranf.f \
 		rantest.f \
 		sample.f \

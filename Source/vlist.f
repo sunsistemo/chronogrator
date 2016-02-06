@@ -1,4 +1,6 @@
-      SUBROUTINE VLIST(nlist, list, rv)
+      SUBROUTINE VLIST(nlist, list, rv, swiver)
+
+c     swiver: switch to say which Verlet list we are using (short or long)
 
       IMPLICIT NONE
       INCLUDE 'parameter.inc'
@@ -9,13 +11,19 @@
 
       INTEGER nlist(npmax), list(npmax, npmax)
       INTEGER i, j
-      DOUBLE PRECISION xr, yr, zr, r
+      DOUBLE PRECISION xr, yr, zr, r, rv
 
       DO i = 1, NPART
          nlist(i) = 0
-         XV(i) = X(i)
-         YV(i) = Y(i)
-         ZV(i) = Z(i)
+         IF (swiver.EQ.1) THEN
+            XV(i) = X(i)
+            YV(i) = Y(i)
+            ZV(i) = Z(i)
+         ELSE
+            XV2(i) = X(i)
+            YV2(i) = Y(i)
+            ZV2(i) = Z(i)
+         END IF
       END DO
       DO i = 1, NPART - 1
          DO j = i + 1, NPART
