@@ -1,4 +1,4 @@
-      SUBROUTINE VLIST(nlist, list)
+      SUBROUTINE VLIST(nlist, list, rv)
 
       IMPLICIT NONE
       INCLUDE 'parameter.inc'
