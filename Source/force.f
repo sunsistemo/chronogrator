@@ -21,7 +21,7 @@ c
       DOUBLE PRECISION xi, yi, zi, En, dx, dy, dz, r2, Vir, virij, enij,
      &     fr, Fx, Fy, Fz, r2i, r6i, rc
       INTEGER i, j, jj
-      INTEGER nlist(npmax), list(npmax, npmax)
+      INTEGER nlist(npmax), list(npmax, npmax), swiver
       DIMENSION Fx(*), Fy(*), Fz(*)
 
       En = 0.D0
@@ -35,11 +35,11 @@ c
 c     --- Check whether to make new Verlet list
          IF (swiver.EQ.1) THEN
             IF (abs(X(i) - XV(i)).GT.(rdv)) THEN
-               CALL VLIST(nlist, list, rv)
+               CALL VLIST(nlist, list, rv, 1)
             END IF
          ELSE
             IF (abs(X(i) - XV2(i)).GT.(rdv2)) THEN
-               CALL VLIST(nlist, list, rv2)
+               CALL VLIST(nlist, list, rv2, 2)
             END IF
          END IF
       END DO

@@ -43,8 +43,8 @@ c --common blocks declaration:
 c     ---initialize system
       CALL INIT(delt, tmax, tequil, temprsq, scale)
 c     ---initialize Verlet lists
-      CALL VLIST(nlist, list, rv)
-      CALL VLIST(nlist2, list2, rv2)
+      CALL VLIST(nlist, list, rv, 1)
+      CALL VLIST(nlist2, list2, rv2, 2)
 c     ---total energy of the system
       CALL TOTERG(en, vir, enk)
       WRITE (6, 99001) en - enk, enk, en + enk, vir
@@ -62,7 +62,7 @@ c     positions in a Verlet-list
          CALL FORCE(fx2, fy2, fz2, enpot2, vir2, nlist2, list2, 2)
 c         CALL SOLVE(fx, fy, fz, enk, delt)
          CALL MULTI(fx, fy, fz, fx2, fy2, fz2, nlist, list,
-         &          nlist2, list2, enk, delt, 10)
+     &        nlist2, list2, enk, delt, 10)
          time = time + delt
          en = enpot + enk
          step = step + 1

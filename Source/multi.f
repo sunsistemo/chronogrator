@@ -1,13 +1,15 @@
       SUBROUTINE MULTI(Fx, Fy, Fz, Fx2, Fy2, Fz2, nlist, list,
-      &                nlist2, list2, Enkin, Delt, n)
+     &                 nlist2, list2, Enkin, Delt, n)
 
       IMPLICIT NONE
+      INCLUDE 'parameter.inc'
       INCLUDE 'conf.inc'
       INCLUDE 'veloc.inc'
-      INCLUDE 'parameter.inc'
-      DOUBLE PRECISION Fx(*), Fy(*), Fz(*)
+      DOUBLE PRECISION Fx(*), Fy(*), Fz(*), En, Vir
       DOUBLE PRECISION Fx2(*),Fy2(*), Fz2(*), En2, Vir2
       DOUBLE PRECISION Delt, dt, v2, Enkin
+      INTEGER nlist(npmax), list(npmax, npmax)
+      INTEGER nlist2(npmax), list2(npmax, npmax)
 
       INTEGER i, j, n
 

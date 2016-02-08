@@ -1,4 +1,4 @@
-      SUBROUTINE VLIST(nlist, list, rv, swiver)
+      SUBROUTINE VLIST(nlist, list, rverlet, swiver)
 
 c     swiver: switch to say which Verlet list we are using (short or long)
 
@@ -10,8 +10,8 @@ c     swiver: switch to say which Verlet list we are using (short or long)
       INCLUDE 'verlet.inc'
 
       INTEGER nlist(npmax), list(npmax, npmax)
-      INTEGER i, j
-      DOUBLE PRECISION xr, yr, zr, r, rv
+      INTEGER i, j, swiver
+      DOUBLE PRECISION xr, yr, zr, r, rverlet
 
       DO i = 1, NPART
          nlist(i) = 0
@@ -48,7 +48,7 @@ c     swiver: switch to say which Verlet list we are using (short or long)
             END IF
 
             r = SQRT(xr**2 + yr**2 + zr**2)
-            IF (abs(r).LT.rv) THEN
+            IF (abs(r).LT.rverlet) THEN
                nlist(i) = nlist(i) + 1
                nlist(j) = nlist(j) + 1
                list(i, nlist(i)) = j
