@@ -35,7 +35,8 @@
             X(i) = X(i) + dt * 2 * VX(i)
             Y(i) = Y(i) + dt * 2 * VY(i)
             Z(i) = Z(i) + dt * 2 * VZ(i)
-
+            En2 = 0.D0
+            Vir2 = 0.D0
             CALL f_particle(i, Fx2, Fy2, Fz2, En2, Vir2, nlist2, list2,
      &                      rv2, rdv2, 2)
 
@@ -46,6 +47,8 @@
       END DO
 
       DO i = 1, NPART
+         enpoti = 0.D0
+         viri = 0.D0
          CALL f_particle(i, Fx, Fy, Fz, enpoti, viri, nlist, list,
      &                   rv, rdv, 1)
 
