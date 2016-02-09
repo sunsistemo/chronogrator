@@ -1,4 +1,4 @@
-COMPFLAGS     =  -O -g -fbacktrace -fcheck=all -ffpe-trap=invalid # -check_bounds -trapeuv
+COMPFLAGS     =  -O -g -fbacktrace -fcheck=all -ffpe-trap=invalid,denormal # -check_bounds -trapeuv
 
 CFLAGS	      = $(COMPFLAGS)
 PFLAGS	      = $(COMPFLAGS)

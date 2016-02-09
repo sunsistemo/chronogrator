@@ -63,7 +63,7 @@ c$$$         CALL FORCE(fx2, fy2, fz2, enpot2, vir2, nlist2, list2, 2)
 c         CALL SOLVE(fx, fy, fz, enk, delt)
 c     --- TODO: clean up this mess
          CALL MULTI(fx, fy, fz, fx2, fy2, fz2, nlist, list,
-     &              nlist2, list2, enk, delt, 10)
+     &              nlist2, list2, enk, enpot, vir, delt, 10)
          time = time + delt
          en = enpot + enk
          step = step + 1

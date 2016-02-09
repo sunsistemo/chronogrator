@@ -1,6 +1,6 @@
 *     *==force.spg  processed by SPAG 4.52O  at 15:46 on 28 Mar 1996
       SUBROUTINE f_particle(i, Fx, Fy, Fz, En, Vir, nlist, list,
-     &                      rver, rdver)
+     &                      rver, rdver, swiver)
 c
 c     Calculate the force acting on particle i
 c
@@ -21,19 +21,17 @@ c
 
       DOUBLE PRECISION xi, yi, zi, En, dx, dy, dz, r2, Vir, virij, enij,
      &     fr, Fx, Fy, Fz, r2i, r6i, rver, rdver
-      INTEGER i, j, jj
+      INTEGER i, j, jj, swiver
       INTEGER nlist(npmax), list(npmax, npmax)
       DIMENSION Fx(*), Fy(*), Fz(*)
 
-      En = 0.D0
-      Vir = 0.D0
 c     --- make forces zero
       Fx(i) = 0
       Fy(i) = 0
       Fz(i) = 0
 c     --- Check whether to make new Verlet list
       IF (abs(X(i) - XV(i)).GT.(rdver)) THEN
-         CALL VLIST(nlist, list, rver, 1)
+         CALL VLIST(nlist, list, rver, swiver)
       END IF
       xi = X(i)
       yi = Y(i)
@@ -50,7 +48,7 @@ c     ---periodic boundary conditions
          dy = dy - BOX*ANINT(dy/BOX)
          dz = dz - BOX*ANINT(dz/BOX)
          r2 = dx*dx + dy*dy + dz*dz
-         IF (r2.LE.RC2) THEN
+         IF (swiver.EQ.1 .AND. r2.LE.RC2) THEN
             r2i = 1/r2
             r6i = r2i*r2i*r2i
             enij = 4*(r6i*r6i-r6i) - ECUT
