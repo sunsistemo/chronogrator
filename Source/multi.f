@@ -5,6 +5,7 @@
       INCLUDE 'parameter.inc'
       INCLUDE 'conf.inc'
       INCLUDE 'veloc.inc'
+      INCLUDE 'verlet.inc'
       DOUBLE PRECISION Fx(*), Fy(*), Fz(*), En, Vir
       DOUBLE PRECISION Fx2(*),Fy2(*), Fz2(*), En2, Vir2
       DOUBLE PRECISION Delt, dt, v2, Enkin
@@ -15,13 +16,15 @@
 
       v2 = 0.D0
       dt = Delt/n
-      DO i = 1, NPART
 
+      DO i = 1, NPART
          VX(i) = VX(i) + 0.5*Delt * (Fx(i)-Fx2(i))
          VY(i) = VY(i) + 0.5*Delt * (Fy(i)-Fy2(i))
          VZ(i) = VZ(i) + 0.5*Delt * (Fz(i)-Fz2(i))
+      END DO
 
-         DO j = 1, n
+      DO j = 1, n
+         DO i = 1, NPART
             VX(i) = VX(i) + 0.5*dt * Fx2(i)
             VY(i) = VY(i) + 0.5*dt * Fy2(i)
             VZ(i) = VZ(i) + 0.5*dt * Fz2(i)
@@ -30,14 +33,18 @@
             Y(i) = Y(i) + dt * 2 * VY(i)
             Z(i) = Z(i) + dt * 2 * VZ(i)
 
-            CALL FORCE(Fx2, Fy2, Fz2, En2, Vir2, nlist2, list2, 2)          !short
+            CALL f_particle(i, Fx2, Fy2, Fz2, En2, Vir2, nlist2, list2,
+     &                      rv, rdv)
 
             VX(i) = VX(i) + 0.5*dt * Fx2(i)
             VY(i) = VY(i) + 0.5*dt * Fy2(i)
             VZ(i) = VZ(i) + 0.5*dt * Fz2(i)
          END DO
+      END DO
 
-         CALL FORCE(Fx, Fy, Fz, En, Vir, nlist, list, 1)             !all
+      DO i = 1, NPART
+         CALL f_particle(i, Fx, Fy, Fz, En, Vir, nlist, list,
+     &                   rv2, rdv2)
 
          VX(i) = VX(i) + 0.5*Delt * (Fx(i)-Fx2(i))
          VY(i) = VY(i) + 0.5*Delt * (Fy(i)-Fy2(i))

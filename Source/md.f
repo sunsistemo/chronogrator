@@ -58,11 +58,12 @@ c     ---total energy of the system
       DO WHILE (time.LT.tmax)
 c     ---propagate all particles with one time-step and store new
 c     positions in a Verlet-list
-         CALL FORCE(fx, fy, fz, enpot, vir, nlist, list, 1)
-         CALL FORCE(fx2, fy2, fz2, enpot2, vir2, nlist2, list2, 2)
+c$$$         CALL FORCE(fx, fy, fz, enpot, vir, nlist, list, 1)
+c$$$         CALL FORCE(fx2, fy2, fz2, enpot2, vir2, nlist2, list2, 2)
 c         CALL SOLVE(fx, fy, fz, enk, delt)
+c     --- TODO: clean up this mess
          CALL MULTI(fx, fy, fz, fx2, fy2, fz2, nlist, list,
-     &        nlist2, list2, enk, delt, 10)
+     &              nlist2, list2, enk, delt, 10)
          time = time + delt
          en = enpot + enk
          step = step + 1
