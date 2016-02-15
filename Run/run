@@ -6,23 +6,26 @@ cd ../Source
 make
 cd ../Run
 
-#original runscript
+rm=$(python -c 'print 2 ** (1/6.)')
+rv2=$(python -c "print 1.05 * 2 ** (1/6.)")
 for temp in 0.728; do
   echo " --- temp ${temp} "
   echo " --- temp ${temp} " >> out
   cat > fort.15  <<endofdata
   ibeg  , delt  tmax  tequil nsamp
    0     0.001  .5   0.00  1
-npart temp rho      rcp  iseed
-108   ${temp} 0.8442   2.5  123456
+npart temp 	rho  	iseed
+108   ${temp} 	0.8442	123456
  scale  temp
  .true.  0.728
 iout igr     iout2  ivacf	t0vacf      t0stress iout3    iout4
 33   10      34     10000000      100       100000        35   36
 samp1    samp2   tdifmax
 .true.  .false.   100
-multi	n
-.true.	5
+rcp	rv	rc2      rv2
+2.5     2.625	${rm}    ${rv2}
+multi	n	rv
+.false.	5	2.625
 endofdata
   cp lj.res          fort.11
   if [[ $1 = "gdb" ]]; then

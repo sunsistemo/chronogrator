@@ -22,14 +22,14 @@ c
       INTEGER ibeg, i, iseed, n
       LOGICAL Scale, Multi_on
       DOUBLE PRECISION rho, Delt, Tmax, rc, sumvx, sumvy, sumvz, sumv2, 
-     &                 temp, Tequil, Temprqs, rm
+     &                 temp, Tequil, Temprqs, rc_two
  
  
 c     ---read simulation data
       READ (15, *)
       READ (15, *) ibeg, Delt, Tmax, Tequil, NSAMP
       READ (15, *)
-      READ (15, *) NPART, temp, rho, rc, iseed
+      READ (15, *) NPART, temp, rho, iseed
       READ (15, *)
       READ (15, *) Scale, Temprqs
       READ (15, *)
@@ -38,7 +38,10 @@ c     ---read simulation data
       READ (15, *)
       READ (15, *) SAMP1, SAMP2, TDIFMAX
       READ (15, *)
-      READ (15, *) Multi_on, n  ! multiple-timestep switch, num smaller steps
+      READ (15, *) rc, rv, rc_two, rv2
+      READ (15, *)
+c     -- multiple-timestep switch, num smaller steps
+      READ (15, *) Multi_on, n
 c     ---initialise and test random number generator
       CALL RANTEST(iseed)
  
@@ -80,11 +83,8 @@ c     ---calculate cut-off radius potential
       RC2 = rc*rc
       ECUT = 4*(1/RC2**6-1/RC2**3)
 c     ---calculate Verlet list parameters
-      rv = 1.05 * rc
       rdv = (rv - rc) / 2.
-      rm = 2 ** (1/6.)
-      rv2 = 1.05 * rm
-      rdv2 = (rv2 - rm) / 2.
+      rdv2 = (rv2 - rc_two) / 2.
 c     ---write input data
       WRITE (6, 99001) NPART, rho, BOX
       WRITE (6, 99003) temp, sumvx, sumvy, sumvz
