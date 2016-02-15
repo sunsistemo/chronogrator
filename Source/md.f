@@ -47,12 +47,13 @@ c     ---initialize Verlet lists
       CALL VLIST(nlist2, list2, rv2, 2)
 c     ---total energy of the system
       CALL TOTERG(en, vir, enk)
-      WRITE (6, 99001) en - enk, enk, en + enk, vir
+      WRITE (6, 99001) en - enk, enk, en, vir
       step = 0
       time = 0
       IF (SAMP1) CALL SAMPLE(0, step, en, vir, enk, delt)
       IF (SAMP2) CALL SAMPLE2(0, delt)
       nstep = INT(tmax/delt)
+
       nstep10 = INT(nstep/10)
       IF (nstep.EQ.0) nstep10 = 0
       DO WHILE (time.LT.tmax)
