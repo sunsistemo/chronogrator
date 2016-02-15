@@ -6,55 +6,55 @@
       INCLUDE 'conf.inc'
       INCLUDE 'veloc.inc'
       INCLUDE 'verlet.inc'
-      DOUBLE PRECISION Fx(*), Fy(*), Fz(*)
+      DOUBLE PRECISION Fx(*), Fy(*), Fz(*), enpoti, viri
       DOUBLE PRECISION Fx2(*),Fy2(*), Fz2(*), En2, Vir2
-      DOUBLE PRECISION Delt, dt, v2, Enkin, Enpot, Vir, enpoti, viri
+      DOUBLE PRECISION Delt, dt, dt2, v2, Enkin, Enpot, Vir
       INTEGER nlist(npmax), list(npmax, npmax)
       INTEGER nlist2(npmax), list2(npmax, npmax)
 
       INTEGER i, j, n
 
       v2 = 0.D0
-      dt = Delt/n
+      dt = Delt * n    ! big time step
+      dt2 = Delt       ! small time step
       Enpot = 0.D0
       Enkin = 0.D0
       Vir = 0.D0
 
       DO i = 1, NPART
-         VX(i) = VX(i) + 0.5*Delt * (Fx(i)-Fx2(i))
-         VY(i) = VY(i) + 0.5*Delt * (Fy(i)-Fy2(i))
-         VZ(i) = VZ(i) + 0.5*Delt * (Fz(i)-Fz2(i))
+         VX(i) = VX(i) + 0.5 * dt * (Fx(i) - Fx2(i))
+         VY(i) = VY(i) + 0.5 * dt * (Fy(i) - Fy2(i))
+         VZ(i) = VZ(i) + 0.5 * dt * (Fz(i) - Fz2(i))
       END DO
 
       DO j = 1, n
          DO i = 1, NPART
-            VX(i) = VX(i) + 0.5*dt * Fx2(i)
-            VY(i) = VY(i) + 0.5*dt * Fy2(i)
-            VZ(i) = VZ(i) + 0.5*dt * Fz2(i)
+            VX(i) = VX(i) + 0.5 * dt2 * Fx2(i)
+            VY(i) = VY(i) + 0.5 * dt2 * Fy2(i)
+            VZ(i) = VZ(i) + 0.5 * dt2 * Fz2(i)
 
-            X(i) = X(i) + dt * 2 * VX(i)
-            Y(i) = Y(i) + dt * 2 * VY(i)
-            Z(i) = Z(i) + dt * 2 * VZ(i)
+            X(i) = X(i) + dt2 * 2 * VX(i)
+            Y(i) = Y(i) + dt2 * 2 * VY(i)
+            Z(i) = Z(i) + dt2 * 2 * VZ(i)
             En2 = 0.D0
             Vir2 = 0.D0
             CALL f_particle(i, Fx2, Fy2, Fz2, En2, Vir2, nlist2, list2,
-     &                      rv2, rdv2, 2)
+     &                      2)
 
-            VX(i) = VX(i) + 0.5*dt * Fx2(i)
-            VY(i) = VY(i) + 0.5*dt * Fy2(i)
-            VZ(i) = VZ(i) + 0.5*dt * Fz2(i)
+            VX(i) = VX(i) + 0.5 * dt2 * Fx2(i)
+            VY(i) = VY(i) + 0.5 * dt2 * Fy2(i)
+            VZ(i) = VZ(i) + 0.5 * dt2 * Fz2(i)
          END DO
       END DO
 
       DO i = 1, NPART
          enpoti = 0.D0
          viri = 0.D0
-         CALL f_particle(i, Fx, Fy, Fz, enpoti, viri, nlist, list,
-     &                   rv, rdv, 1)
+         CALL f_particle(i, Fx, Fy, Fz, enpoti, viri, nlist, list, 1)
 
-         VX(i) = VX(i) + 0.5*Delt * (Fx(i)-Fx2(i))
-         VY(i) = VY(i) + 0.5*Delt * (Fy(i)-Fy2(i))
-         VZ(i) = VZ(i) + 0.5*Delt * (Fz(i)-Fz2(i))
+         VX(i) = VX(i) + 0.5 * dt * (Fx(i) - Fx2(i))
+         VY(i) = VY(i) + 0.5 * dt * (Fy(i) - Fy2(i))
+         VZ(i) = VZ(i) + 0.5 * dt * (Fz(i) - Fz2(i))
 
          Vir = Vir + viri
          Enpot = Enpot + enpoti

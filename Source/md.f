@@ -20,8 +20,8 @@ c
 c__________________________________________________________________________
 c
       IMPLICIT NONE
-      INTEGER nstep, nstep10, step
-      LOGICAL scale
+      INTEGER nstep, nstep10, step, n
+      LOGICAL scale, multi_on
       DOUBLE PRECISION en, ent, vir, virt, enk, time, enpot, delt, tmax,
      &                 enkt, tequil, temprsq
       DOUBLE PRECISION enpot2, vir2
@@ -41,7 +41,7 @@ c --common blocks declaration:
 
       WRITE (6, *) '**************** MC_NPT ***************'
 c     ---initialize system
-      CALL INIT(delt, tmax, tequil, temprsq, scale)
+      CALL INIT(delt, tmax, tequil, temprsq, scale, multi_on, n)
 c     ---initialize Verlet lists
       CALL VLIST(nlist, list, rv, 1)
       CALL VLIST(nlist2, list2, rv2, 2)
@@ -56,15 +56,17 @@ c     ---total energy of the system
       nstep10 = INT(nstep/10)
       IF (nstep.EQ.0) nstep10 = 0
       DO WHILE (time.LT.tmax)
-c     ---propagate all particles with one time-step and store new
-c     positions in a Verlet-list
-c$$$         CALL FORCE(fx, fy, fz, enpot, vir, nlist, list, 1)
-c$$$         CALL FORCE(fx2, fy2, fz2, enpot2, vir2, nlist2, list2, 2)
-c         CALL SOLVE(fx, fy, fz, enk, delt)
-c     --- TODO: clean up this mess
-         CALL MULTI(fx, fy, fz, fx2, fy2, fz2, nlist, list,
-     &              nlist2, list2, enk, enpot, vir, delt, 10)
-         time = time + delt
+c     ---propagate all particles with one time-step and store new positions in a
+c        Verlet-list
+         IF (multi_on) THEN
+            CALL MULTI(fx, fy, fz, fx2, fy2, fz2, nlist, list,
+     &           nlist2, list2, enk, enpot, vir, delt, n)
+            time = time + delt * n
+         ELSE
+            CALL FORCE(fx, fy, fz, enpot, vir, nlist, list)
+            CALL SOLVE(fx, fy, fz, enk, delt)
+            time = time + delt
+         END IF
          en = enpot + enk
          step = step + 1
          IF (time.LT.tequil) THEN

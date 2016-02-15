@@ -1,5 +1,5 @@
 **==init.spg  processed by SPAG 4.52O  at 15:46 on 28 Mar 1996
-      SUBROUTINE INIT(Delt, Tmax, Tequil, Temprqs, Scale)
+      SUBROUTINE INIT(Delt, Tmax, Tequil, Temprqs, Scale, Multi_on, n)
 c
 C     reads input data and model parameters
 c
@@ -19,8 +19,8 @@ c
       INCLUDE 'veloc.inc'
       INCLUDE 'samp.inc'
       INCLUDE 'verlet.inc'
-      INTEGER ibeg, i, iseed
-      LOGICAL Scale
+      INTEGER ibeg, i, iseed, n
+      LOGICAL Scale, Multi_on
       DOUBLE PRECISION rho, Delt, Tmax, rc, sumvx, sumvy, sumvz, sumv2, 
      &                 temp, Tequil, Temprqs, rm
  
@@ -37,6 +37,8 @@ c     ---read simulation data
      &             IOUT4
       READ (15, *)
       READ (15, *) SAMP1, SAMP2, TDIFMAX
+      READ (15, *)
+      READ (15, *) Multi_on, n  ! multiple-timestep switch, num smaller steps
 c     ---initialise and test random number generator
       CALL RANTEST(iseed)
  

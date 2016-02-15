@@ -21,12 +21,14 @@ iout igr     iout2  ivacf	t0vacf      t0stress iout3    iout4
 33   10      34     10000000      100       100000        35   36
 samp1    samp2   tdifmax
 .true.  .false.   100
+multi	n
+.true.	5
 endofdata
   cp lj.res          fort.11
   if [[ $1 = "gdb" ]]; then
       gdb ../Source/MD
   else
-      time ../Source/MD
+      /usr/bin/time -p ../Source/MD
   fi
  cp fort.21         lj.res
  mv fort.66         lj.prt

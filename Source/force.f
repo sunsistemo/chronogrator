@@ -1,5 +1,5 @@
 **==force.spg  processed by SPAG 4.52O  at 15:46 on 28 Mar 1996
-      SUBROUTINE FORCE(Fx, Fy, Fz, En, Vir, nlist, list, swiver)
+      SUBROUTINE FORCE(Fx, Fy, Fz, En, Vir, nlist, list)
 c
 c  Calculate the force acting on the particles
 c
@@ -21,7 +21,7 @@ c
       DOUBLE PRECISION xi, yi, zi, En, dx, dy, dz, r2, Vir, virij, enij,
      &     fr, Fx, Fy, Fz, r2i, r6i, rc
       INTEGER i, j, jj
-      INTEGER nlist(npmax), list(npmax, npmax), swiver
+      INTEGER nlist(npmax), list(npmax, npmax)
       DIMENSION Fx(*), Fy(*), Fz(*)
 
       En = 0.D0
@@ -33,14 +33,8 @@ c
       END DO
       DO i = 1, NPART
 c     --- Check whether to make new Verlet list
-         IF (swiver.EQ.1) THEN
-            IF (abs(X(i) - XV(i)).GT.(rdv)) THEN
-               CALL VLIST(nlist, list, rv, 1)
-            END IF
-         ELSE
-            IF (abs(X(i) - XV2(i)).GT.(rdv2)) THEN
-               CALL VLIST(nlist, list, rv2, 2)
-            END IF
+         IF (abs(X(i) - XV(i)).GT.(rdv)) THEN
+            CALL VLIST(nlist, list, rv, 1)
          END IF
       END DO
       DO i = 1, NPART
