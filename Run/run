@@ -24,8 +24,8 @@ samp1    samp2   tdifmax
 .true.  .false.   100
 rcp	rv	rc2      rv2
 2.5     2.625	${rm}    ${rv2}
-multi	n	rv
-.false.	5	2.625
+multi	n
+.true.	5
 endofdata
   cp lj.res          fort.11
   if [[ $1 = "gdb" ]]; then
