@@ -28,16 +28,7 @@ c     --- make forces zero
       Fx(i) = 0
       Fy(i) = 0
       Fz(i) = 0
-c     --- Check whether to make new Verlet list
-      IF (swiver.EQ.1) THEN
-         IF (abs(X(i) - XV(i)).GT.(rdv)) THEN
-            CALL VLIST(nlist, list, rv, swiver)
-         END IF
-      ELSE
-         IF (abs(X(i) - XV2(i)).GT.(rdv2)) THEN
-            CALL VLIST(nlist, list, rv2, swiver)
-         END IF
-      END IF
+
       xi = X(i)
       yi = Y(i)
       zi = Z(i)

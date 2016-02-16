@@ -20,6 +20,11 @@
       Enpot = 0.D0
       Enkin = 0.D0
       Vir = 0.D0
+      DO i = 1, NPART
+         IF (abs(X(i) - XV(i)).GT.(rdv)) THEN
+            CALL VLIST(nlist, list, rv, 1)
+         END IF
+      END DO
 
       DO i = 1, NPART
          VX(i) = VX(i) + 0.5 * dt * (Fx(i) - Fx2(i))
@@ -28,6 +33,12 @@
       END DO
 
       DO j = 1, n
+         DO i = 1, NPART
+            IF (abs(X(i) - XV2(i)).GT.(rdv2)) THEN
+               CALL VLIST(nlist2, list2, rv2, 2)
+            END IF
+         END DO
+
          DO i = 1, NPART
             VX(i) = VX(i) + 0.5 * dt2 * Fx2(i)
             VY(i) = VY(i) + 0.5 * dt2 * Fy2(i)
