@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # compile
 rm out
@@ -6,7 +6,7 @@ cd ../Source
 make
 cd ../Run
 
-rm=$(python -c 'print 2 ** (1/6.)')
+rmin=$(python -c 'print 2 ** (1/6.)')
 rv2=$(python -c "print 1.05 * 2 ** (1/6.)")
 for temp in 0.728; do
   echo " --- temp ${temp} "
@@ -23,9 +23,9 @@ iout igr     iout2  ivacf	t0vacf      t0stress iout3    iout4
 samp1    samp2   tdifmax
 .true.  .false.   100
 rcp	rv	rc2      rv2
-2.5     2.625	${rm}    ${rv2}
+2.5     2.625	${rmin}    ${rv2}
 multi	n
-.true.	5
+.true.	3
 endofdata
   cp lj.res          fort.11
   if [[ $1 = "gdb" ]]; then

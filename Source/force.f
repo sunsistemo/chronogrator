@@ -1,5 +1,6 @@
 **==force.spg  processed by SPAG 4.52O  at 15:46 on 28 Mar 1996
-      SUBROUTINE FORCE(Fx, Fy, Fz, En, Vir, nlist, list)
+      SUBROUTINE FORCE(Fx, Fy, Fz, En, Vir, nlist, list, multi_on,
+     &     swiver)
 c
 c  Calculate the force acting on the particles
 c
@@ -20,7 +21,8 @@ c
 
       DOUBLE PRECISION xi, yi, zi, En, dx, dy, dz, r2, Vir, virij, enij,
      &     fr, Fx, Fy, Fz, r2i, r6i, rc
-      INTEGER i, j, jj
+      INTEGER i, j, jj, swiver
+      LOGICAL multi_on
       INTEGER nlist(npmax), list(npmax, npmax)
       DIMENSION Fx(*), Fy(*), Fz(*)
 
@@ -33,8 +35,14 @@ c
       END DO
       DO i = 1, NPART
 c     --- Check whether to make new Verlet list
-         IF (abs(X(i) - XV(i)).GT.(rdv)) THEN
-            CALL VLIST(nlist, list, rv, 1)
+         IF (swiver.eq.1) THEN
+            IF (abs(X(i) - XV(i)).GT.(rdv)) THEN
+               CALL VLIST(nlist, list, rv, 1)
+            END IF
+         ELSE
+            IF (abs(X(i) - XV2(i)).GT.(rdv2)) THEN
+               CALL VLIST(nlist, list, rv2, 2)
+            END IF
          END IF
       END DO
       DO i = 1, NPART
@@ -53,11 +61,17 @@ c           ---periodic boundary conditions
             dy = dy - BOX*ANINT(dy/BOX)
             dz = dz - BOX*ANINT(dz/BOX)
             r2 = dx*dx + dy*dy + dz*dz
-            IF (r2.LE.RC2) THEN
+            IF (swiver.EQ.1 .AND. r2.LE.RC2) THEN
                r2i = 1/r2
                r6i = r2i*r2i*r2i
-               enij = 4*(r6i*r6i-r6i) - ECUT
-               virij = 48*(r6i*r6i-0.5D0*r6i)
+               IF (multi_on) THEN
+                  ! TODO: switching function here !
+                  enij = 4*(r6i*r6i-r6i) - ECUT
+                  virij = 48*(r6i*r6i-0.5D0*r6i)
+               ELSE
+                  enij = 4*(r6i*r6i-r6i) - ECUT
+                  virij = 48*(r6i*r6i-0.5D0*r6i)
+               END IF
                En = En + enij
                Vir = Vir + virij
                fr = virij*r2i

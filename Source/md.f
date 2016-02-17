@@ -44,7 +44,15 @@ c     ---initialize system
       CALL INIT(delt, tmax, tequil, temprsq, scale, multi_on, n)
 c     ---initialize Verlet lists
       CALL VLIST(nlist, list, rv, 1)
-      CALL VLIST(nlist2, list2, rv2, 2)
+      IF (multi_on) THEN
+         CALL VLIST(nlist2, list2, rv2, 2)
+      END IF
+c     --- Initial force calculation to kick-off multi time step integrator
+      IF (multi_on) THEN
+         CALL FORCE(Fx, Fy, Fz, Enpot, Vir, nlist, list, .true., 1)
+         CALL FORCE(Fx2, Fy2, Fz2, Enpot2, Vir2, nlist2, list2, .true.,
+     &        2)
+      END IF
 c     ---total energy of the system
       CALL TOTERG(en, vir, enk)
       WRITE (6, 99001) en - enk, enk, en, vir
@@ -53,7 +61,6 @@ c     ---total energy of the system
       IF (SAMP1) CALL SAMPLE(0, step, en, vir, enk, delt)
       IF (SAMP2) CALL SAMPLE2(0, delt)
       nstep = INT(tmax/delt)
-
       nstep10 = INT(nstep/10)
       IF (nstep.EQ.0) nstep10 = 0
       DO WHILE (time.LT.tmax)
@@ -64,7 +71,7 @@ c        Verlet-list
      &           nlist2, list2, enk, enpot, vir, delt, n)
             time = time + delt * n
          ELSE
-            CALL FORCE(fx, fy, fz, enpot, vir, nlist, list)
+            CALL FORCE(fx, fy, fz, enpot, vir, nlist, list, .false., 1)
             CALL SOLVE(fx, fy, fz, enk, delt)
             time = time + delt
          END IF

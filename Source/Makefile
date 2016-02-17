@@ -33,7 +33,6 @@ MAKEFILE      = Makefile
 
 OBJS	      = eneri.o \
 		force.o \
-                f_particle.o \
 		init.o \
 		lattice.o \
 		md.o \
@@ -63,7 +62,6 @@ SHELL	      = /bin/sh
 
 SRCS	      = eneri.f \
 		force.f \
-                f_particle.f \
 		init.f \
 		lattice.f \
 		md.f \
