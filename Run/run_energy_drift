@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
 
-# compile
-rm out
-cd ../Source
-make
-cd ../Run
 
 rmin=$(python -c 'print 2 ** (1/6.)')
 rv2=$(python -c "print 1.05 * 2 ** (1/6.)")
-for temp in 0.728; do
-  echo " --- temp ${temp} "
-  echo " --- temp ${temp} " >> out
+temp=0.7238
+stepsizes="0.001 0.0005 0.0001 0.00005 0.00001 0.000005 0.000001"
+
+
+f="energy_drift.txt"
+# printf "# deltat \tenergy_drift\n" > "$f"
+
+for delt in $stepsizes; do
   cat > fort.15  <<endofdata
   ibeg  , delt  tmax  tequil nsamp
-   0     0.001  1.5   0.3  1
+   0     ${delt}  5     1.00   1
 npart temp 	rho  	iseed
 108   ${temp} 	0.8442	123456
  scale  temp
@@ -25,20 +25,11 @@ samp1    samp2   tdifmax
 rcp	rv	rc2      rv2
 2.5     2.625	${rmin}    ${rv2}
 multi	n	drift
-.true.	3	.false.
+.false.	3	.true.
+
 endofdata
   cp lj.res          fort.11
-  if [[ $1 = "gdb" ]]; then
-      gdb ../Source/MD
-  else
-      /usr/bin/time -p ../Source/MD
-  fi
- cp fort.21         lj.res
- mv fort.66         lj.prt
- mv fort.33         lj.gr
- #perform block analysis
-  cp lj.prth fort.31
-  mv  lj.prt fort.32
-  ../Block/block
+  drift=$(../Source/MD | grep 'Energy Drift' | awk '{print $4}')
+  printf "%s\t%s\n" "$delt" "$drift" >> "$f"
   rm fort.*
 done

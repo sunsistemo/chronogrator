@@ -21,7 +21,7 @@ c__________________________________________________________________________
 c
       IMPLICIT NONE
       INTEGER nstep, nstep10, step, n
-      LOGICAL scale, multi_on
+      LOGICAL scale, multi_on, drift
       DOUBLE PRECISION en, ent, vir, virt, enk, time, enpot, delt, tmax,
      &                 enkt, tequil, temprsq
       DOUBLE PRECISION enpot2, en2, vir2, enk2
@@ -45,7 +45,7 @@ c --common blocks declaration:
 
       WRITE (6, *) '**************** MC_NPT ***************'
 c     ---initialize system
-      CALL INIT(delt, tmax, tequil, temprsq, scale, multi_on, n)
+      CALL INIT(delt, tmax, tequil, temprsq, scale, multi_on, n, drift)
 c     ---initialize Verlet lists
       CALL VLIST(nlist, list, rv, 1)
       IF (multi_on) THEN
@@ -81,12 +81,12 @@ c        Verlet-list
          END IF
          en = enpot + enk
          step = step + 1
-         IF (E0_step.eq.-1 .and. time.gt.tequil) THEN
+         IF (drift .and. E0_step.eq.-1 .and. time.gt.tequil) THEN
 c     --- Set initial energy after equilibration
             CALL TOTERG(en2, vir2, enk2)
             E0 = en2
             E0_step = 0
-         ELSE IF (E0_step.gt.-1) THEN
+         ELSE IF (drift .and. E0_step.gt.-1) THEN
 c     --- Calculate energy drift
             CALL TOTERG(en2, vir2, enk2)
             E_drift = E_drift + abs((en2 - E0) / E0)
@@ -115,8 +115,10 @@ c           ---write intermediate configuration to file
       WRITE (6, 99002) ent - enkt, ent, virt
       CALL STORE(21)
 c     --- Report average energy drift from the initial energy
-      E_drift = E_drift / (E0_step - 1)
-      write (6, *) "Average Energy Drift: ", E_drift
+      IF (drift) THEN
+         E_drift = E_drift / (E0_step - 1)
+         write (6, *) "Average Energy Drift: ", E_drift
+      END IF
       STOP
 
 99001 FORMAT (' Total pot. energy in. conf.       : ', f12.5, /,
