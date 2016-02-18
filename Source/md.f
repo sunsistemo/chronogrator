@@ -112,7 +112,7 @@ c           ---write intermediate configuration to file
       CALL TOTERG(ent, virt, enkt)
       IF (SAMP1) CALL SAMPLE(2, step, en, vir, enk, delt)
       IF (SAMP2) CALL SAMPLE2(2, delt)
-      WRITE (6, 99002) ent, virt
+      WRITE (6, 99002) ent - enkt, ent, virt
       CALL STORE(21)
 c     --- Report average energy drift from the initial energy
       E_drift = E_drift / (E0_step - 1)
@@ -123,7 +123,9 @@ c     --- Report average energy drift from the initial energy
      &        ' Total kinetic energy in. conf.    : ', f12.5, /,
      &        ' Total energy in. conf.            : ', f12.5, /,
      &        ' Total virial initial configuration: ', f12.5)
-99002 FORMAT (' Total energy end of simulation    : ', f12.5, /,
-     &        ' Total virial end of simulation    : ', f12.5)
+99002 FORMAT (' Potential erg. end of simulation  : ', f12.5, /,
+     &     ' Total energy end of simulation       : ', f12.5, /,
+     &     ' Total virial end of simulation       : ', f12.5)
+
 
       END

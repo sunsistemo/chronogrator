@@ -20,12 +20,13 @@ c
       INCLUDE 'samp.inc'
 
       DOUBLE PRECISION xi, yi, zi, En, dx, dy, dz, r2, Vir, virij, enij,
-     &     fr, Fx, Fy, Fz, r2i, r6i, rc
+     &     fr, Fx, Fy, Fz, r2i, r6i, rc, lambda, rc_two, Sf, gam
       INTEGER i, j, jj, swiver
       LOGICAL multi_on
       INTEGER nlist(npmax), list(npmax, npmax)
       DIMENSION Fx(*), Fy(*), Fz(*)
-
+      lambda = 0.3d0
+      rc_two = rv2 - rdv2
       En = 0.D0
       Vir = 0.D0
       DO i = 1, NPART
@@ -61,20 +62,26 @@ c           ---periodic boundary conditions
             dy = dy - BOX*ANINT(dy/BOX)
             dz = dz - BOX*ANINT(dz/BOX)
             r2 = dx*dx + dy*dy + dz*dz
-            IF (swiver.EQ.1 .AND. r2.LE.RC2) THEN
+            IF (r2.LE.RC2) THEN
+               Sf = 1.0d0
+c     Switching function for splitting up the force calculation
+                IF (multi_on.AND.swiver.EQ.2) THEN
+                   IF (r2.GT.rc_two*rc_two) THEN
+                      Sf = 0.0d0
+                   ELSEIF (r2.GT.(rc_two - lambda)) THEN
+                      gam = (Sqrt(r2) - rc_two + lambda)/lambda
+                      Sf = 1.0d0 + gam*gam*(2.0d0*gam - 3.0d0)
+                   END IF
+               END IF
+
+c     Force calculation
                r2i = 1/r2
                r6i = r2i*r2i*r2i
-               IF (multi_on) THEN
-                  ! TODO: switching function here !
-                  enij = 4*(r6i*r6i-r6i) - ECUT
-                  virij = 48*(r6i*r6i-0.5D0*r6i)
-               ELSE
-                  enij = 4*(r6i*r6i-r6i) - ECUT
-                  virij = 48*(r6i*r6i-0.5D0*r6i)
-               END IF
+               enij = 4*(r6i*r6i-r6i) - ECUT
+               virij = 48*(r6i*r6i-0.5D0*r6i)
                En = En + enij
                Vir = Vir + virij
-               fr = virij*r2i
+               fr = virij*r2i*Sf
                Fx(i) = Fx(i) + fr*dx
                Fy(i) = Fy(i) + fr*dy
                Fz(i) = Fz(i) + fr*dz
