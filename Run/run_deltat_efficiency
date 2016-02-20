@@ -6,12 +6,10 @@ rv2=$(python -c "print 1.05 * 2 ** (1/6.)")
 temp=0.7238
 stepsizes="0.001 0.0005 0.0001 0.00005 0.00001 0.000005 0.000001"
 nsteps="1 2 3 4 5 6 7 8 9 10"
-#stepsizes="0.001 0.0005 0.0001 "
-#nsteps="1 2 "
 f="n_efficiency.txt"
 
 for delt in $stepsizes; do
-    printf "%s\n" "$delt" >> "$f"
+    printf "delt = %s\n" "$delt" >> "$f"
     for n in $nsteps; do
         cat > fort.15  <<endofdata
   ibeg  , delt  tmax  tequil nsamp
@@ -28,13 +26,11 @@ rcp	rv	rc2      rv2
 2.5     2.625	${rmin}    ${rv2}
 multi	n	drift
 .true.	${n}	.false.
-
 endofdata
         cp lj.res          fort.11
         printf "%s\t" "$n" >> "$f"
         /usr/bin/time -f "%e\t%U\t%S" -o "$f" -a ../Source/MD
-
     done
     rm fort.*
-    printf "%s\n" " " >> "$f$"
+    printf "\n" >> "$f"
 done
