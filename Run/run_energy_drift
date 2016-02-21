@@ -25,7 +25,7 @@ samp1    samp2   tdifmax
 rcp	rv	rc2      rv2
 2.5     2.625	${rmin}    ${rv2}
 multi	n	drift
-.false.	3	.true.
+.true.	3	.true.
 
 endofdata
   cp lj.res          fort.11
