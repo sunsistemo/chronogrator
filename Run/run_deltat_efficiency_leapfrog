@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+rmin=$(python -c 'print 2 ** (1/6.)')
+rv2=$(python -c "print 1.05 * 2 ** (1/6.)")
+temp=0.7238
+stepsizes="0.001 0.0005 0.0001 0.00005 0.00001 0.000005 0.000001"
+f="deltat_efficiency_leapfrog.txt"
+
+
+for delt in $stepsizes; do
+    cat > fort.15  <<endofdata
+  ibeg  , delt  tmax  tequil nsamp
+   0     ${delt}  5     1.00   1
+npart temp 	rho  	iseed
+108   ${temp} 	0.8442	123456
+ scale  temp
+ .true.  0.728
+iout igr     iout2  ivacf	t0vacf      t0stress iout3    iout4
+33   10      34     10000000      100       100000        35   36
+samp1    samp2   tdifmax
+.true.  .false.   100
+rcp	rv	rc2      rv2
+2.5     2.625	${rmin}    ${rv2}
+multi	n	drift
+.false.	1	.false.
+endofdata
+    cp lj.res          fort.11
+    printf "%s\t" "$delt" >> "$f"
+    /usr/bin/time -f "%e\t%U\t%S" -o "$f" -a ../Source/MD
+    rm fort.*
+done
