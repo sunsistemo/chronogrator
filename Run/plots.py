@@ -97,4 +97,4 @@ def plot_energy_drift():
     plt.ylabel("E")
     plt.grid()
     plt.legend(loc="lower right", ncol=2)
-    plt.savefig("energy_drft", dpi=400)
+    plt.savefig("energy_drift", dpi=400)
