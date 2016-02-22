@@ -3,9 +3,10 @@ CHRONOGRATOR
 
 [![Computational Science](http://preview.computationalscience.nl/wp-content/uploads/2014/09/computationalsciencelogo-fc-trans-300x100.png)](http://uva.computationalscience.nl/)
 
-This is our code for project "K.4 Multiple-Time-Step Integrators" from the book
-"Understanding Molecular SImulation" by Daan Frenkel and Berend Smit. The code
-is based on
+Our code and
+[report](https://github.com/sunsistemo/chronogrator/blob/master/Report/chronogrator.pdf) for the
+project "K.4 Multiple-Time-Step Integrators" from the book "Understanding Molecular SImulation" by
+Daan Frenkel and Berend Smit. The code is based on
 [Case Study 4](http://www.acmm.nl/molsim/frenkel_smit/CaseStudy_4/index.html).
 
 Compile the simulation with `make` in the `Source` directory (you need
